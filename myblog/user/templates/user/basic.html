@@ -1,0 +1,107 @@
+{%load static%}
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{title}}</title>
+		<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+		<link rel="stylesheet" type="text/css" href="/static/admin/css/dashboard.css">
+
+
+		<meta charset="utf-8">
+		<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css">
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+		<link rel="stylesheet" type="text/css" href = "http://beezlebulb.pythonanywhere.com/static/user/basic.css">
+	</head>
+
+	<body class=" dashboard" data-admin-utc-offset="0">
+
+		<div id="container">
+			<div id="header">
+				<div id="branding">
+					<h1 id="site-name"><a style="font-size:40px" href="{% url 'home'%}"> <b>MyBlog </b></a></h1>
+				</div>
+
+				<div id="user-tools"  style="font-size:18px">
+					{% if user.is_authenticated %}
+						Welcome <strong>{{user.username}}</strong>
+					{%else %}
+						Welcome User
+					{% endif %}
+					/
+					<a href="{% url 'home'%}">Home</a> /
+					<a href="{% url 'dash'%}">Dash</a>
+				</div>
+			</div>
+            <div class="row">
+                <div class="col-md-8 blogs">
+    				{% block content %}{% endblock %}
+    		    </div>
+
+    		    <div class="col-md-4 sidebar">
+    		    	{% if messages %}
+    					{% for message in messages %}
+    						{% if message.extra_tags == 'login' %}
+    						<div class="alert alert-{{ message.level_tag }}">
+    							{{ message }}
+    						</div>
+    						{% endif %}
+    					{% endfor %}
+    				{% endif %}
+
+
+    				{% if user.is_authenticated%}
+    					<form method="POST">
+    					    {% csrf_token %}
+    			   			<input hidden>
+    			   			<button class="btn btn-outline-info" name="logout" type="submit">Log OUT</button>
+    					</form>
+
+    					<button class="btn btn-outline-info" name="addblog" onclick="location.href='{% url 'blog-create' %}'" style="margin-top: 10px; margin-left: 10px"  > Add </button>
+    				{% else %}
+    					<form method="POST">
+    						{% csrf_token %}
+    						<fieldset class="form-group">
+    							<legend class="border-bottom mb-4">LOG IN</legend>
+    							{{form1.as_p}}
+    						</fieldset>
+    						<div class="form-group">
+    							<button class="btn btn-outline-info" name="login" type="submit">Log IN</button>
+    						</div >
+    					</form>
+
+    					{% if messages %}
+    						{% for message in messages %}
+    							{% if message.extra_tags == "signup" %}
+    								<div class="alert alert-{{ message.level_tag }}">
+    									{{ message }}
+    								</div>
+    							{% endif %}
+    						{% endfor %}
+    					{% endif %}
+
+    					<form method="POST">
+    						{% csrf_token %}
+    						<fieldset class="form-group">
+    							<legend class="border-bottom mb-4 m1-8">Don't have an Account? Create Here!!</legend>
+    							{{form2.as_p}}
+    						</fieldset>
+    						<div class="form-group">
+    							<button class="btn btn-outline-info" name="signup" type="submit">Register</button>
+    						</div>
+    					</form>
+    				{% endif %}
+    		    </div>
+            </div>
+
+		</div>
+
+	    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+	</body>
+</html>

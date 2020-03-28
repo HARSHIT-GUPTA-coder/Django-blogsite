@@ -1,0 +1,24 @@
+{% extends "user/basic.html" %}
+
+{%block content%}
+	<h1 style="margin-left: 30px">Blogs</h1>
+	{% for blog in blogs %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="blog-metadata">
+              <a class="mr-2" >{{ blog.author }}</a>
+              <small class="text-muted">{{ blog.pub_date }}</small>
+            </div>
+            <h2><a class="blog-title" href="{% url 'blog-update' blog.id %}" >{{ blog.heading }}</a></h2>
+            <p class="blog-content">{{ blog.body }}</p>
+          </div>
+          <div>
+            <button class="btn btn-outline-info" name="updateblog" onclick="location.href='{% url 'blog-update' blog.id %}'" > Update </button>
+            <button class="btn btn-outline-danger" name="deleteblog" onclick="location.href='{% url 'blog-delete' blog.id %}'" > Delete </button>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock %}
+
+
+
